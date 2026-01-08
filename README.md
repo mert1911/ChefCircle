@@ -2,6 +2,9 @@
 
 ChefCircle is a comprehensive recipe management and social cooking platform that empowers users to discover recipes, plan meals, analyze nutrition, and connect with a vibrant community of food enthusiasts.
 
+<img width="1508" height="790" alt="Screenshot 2026-01-08 at 09 43 35" src="https://github.com/user-attachments/assets/e9a7faa3-fa2b-49c3-8bac-3d850b86c862" />
+
+
 ## Features
 
 ### 🍳 Recipe Management
