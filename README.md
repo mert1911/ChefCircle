@@ -23,7 +23,7 @@ ChefCircle is a comprehensive recipe management and social cooking platform that
 
 ### 💎 Premium & AI
 - **ChefCircle Premium**: Subscription service integrated with Stripe for exclusive features.
-- **AI Culinary Assistant**: Integrated AI chatbot (powered by OpenAI) for personalized cooking advice, recipe suggestions, and technique tips.
+- **AI Culinary Assistant**: Integrated AI Agent for personalized cooking advice, recipe suggestions, and technique tips.
 - **Advanced Insights**: Premium-only nutritional data and advanced filtering capabilities.
 
 ## Tech Stack
