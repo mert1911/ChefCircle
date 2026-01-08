@@ -1,178 +1,128 @@
-# Browse Page Custom Hooks
+# ChefCircle
 
-This document describes the custom hooks extracted from the Browse.tsx component to improve code organization and reusability.
+ChefCircle is a comprehensive recipe management and social cooking platform that empowers users to discover recipes, plan meals, analyze nutrition, and connect with a vibrant community of food enthusiasts.
 
-## Hooks Overview
+## Features
 
-### 1. `useBrowseData` - Data Fetching and Interactions
-**Purpose**: Manages all data fetching, state management, and user interactions for the browse page.
+### 🍳 Recipe Management
+- **Discover & Browse**: extensive recipe catalog with advanced filtering options (cuisine, difficulty, preparation time, tags).
+- **Create & Edit**: Rich text editor for creating detailed recipes with ingredients, steps, and photos.
+- **Nutrition Analysis**: Detailed nutritional breakdown for recipes to help users track their intake.
+- **Favorites**: Save and organize your favorite recipes for quick access.
 
-**Features**:
-- Fetches recipes and mealplans
-- Manages favorites and planned recipes
-- Handles user interactions (toggle favorites, meal planning)
-- Manages loading and error states
-- Handles navigation with scroll position preservation
+### 📅 Meal Planning
+- **MyWeek**: Interactive weekly calendar to schedule breakfast, lunch, and dinner.
+- **Meal Plans**: Create, save, and reuse complete meal plans (e.g., "Weight Loss", "High Protein").
+- **Smart Integration**: Seamlessly add recipes from the catalog to your schedule.
 
-**Usage**:
-```typescript
-const {
-  recipes,
-  mealplans,
-  loading,
-  mealplansLoading,
-  error,
-  mealplansError,
-  favorites,
-  userPlannedRecipes,
-  favoriteMealplans,
-  previewDialogOpen,
-  selectedMealPlan,
-  isPremium,
-  handleToggleFavorite,
-  handleToggleMealplan,
-  handleToggleFavoriteMealplan,
-  handleRecipeNavigation,
-  handleImportMealPlan,
-  setPreviewDialogOpen,
-  setSelectedMealPlan,
-} = useBrowseData({ tab, visibleRecipeCount });
+### 🤝 Social & Community
+- **Community Hub**: Share culinary moments, tips, and photos with other users.
+- **Chef Profiles**: Custom user profiles showcasing created recipes and activity.
+- **Following System**: Follow favorite chefs and creators to stay updated with their latest content.
+- **Interactions**: Like, comment on, and rate recipes and posts.
+
+### 💎 Premium & AI
+- **ChefCircle Premium**: Subscription service integrated with Stripe for exclusive features.
+- **AI Culinary Assistant**: Integrated AI chatbot (powered by OpenAI) for personalized cooking advice, recipe suggestions, and technique tips.
+- **Advanced Insights**: Premium-only nutritional data and advanced filtering capabilities.
+
+## Tech Stack
+
+### Frontend
+- **Core**: React 19, TypeScript, Vite
+- **UI/Styling**: Tailwind CSS, Shadcn UI (Radix Primitives), Lucide Icons
+- **State & Data**: React Query (@tanstack/react-query), Axios
+- **Forms**: React Hook Form, Zod validation
+- **Visualization**: Recharts for nutrition data
+- **Payments**: Stripe Elements (@stripe/stripe-js)
+
+### Backend
+- **Runtime**: Node.js, Express.js
+- **Language**: TypeScript
+- **Database**: MongoDB (Mongoose ODM)
+- **Authentication**: JWT (JSON Web Tokens) with Refresh Token Rotation, Bcrypt for hashing
+- **File Handling**: Multer for image uploads
+- **Security**: Helmet, CORS, Rate Limiting (implied)
+
+### DevOps & Infrastructure
+- **Containerization**: Docker & Docker Compose
+- **Orchestration**: Multi-container setup for Frontend, Backend, and MongoDB
+
+## System Design
+
+ChefCircle follows a modular Client-Server architecture:
+
+1.  **Frontend (SPA)**: 
+    - Built as a responsive Single Page Application.
+    - Consumes the REST API for all data operations.
+    - Handles client-side routing and state management.
+
+2.  **Backend (REST API)**:
+    - Exposes a structured API structure (`/api/recipes`, `/api/auth`, `/api/payment`, etc.).
+    - Implements Middleware patterns for Authentication (`auth.ts`), Uploads (`multerUpload.ts`), and Validation.
+    - Connects to external services (Stripe, OpenAI) via secure service layers.
+
+3.  **Database Layer**:
+    - **MongoDB**: Used for storing flexible document structures like Recipes, Users, and Activity Logs.
+    - **Volumes**: Docker volumes persist database data and user uploads.
+
+## Getting Started
+
+### Prerequisites
+- Docker & Docker Compose (Recommended)
+- Node.js v18+ (for local development)
+
+### Quick Start (Docker)
+
+The easiest way to run the application is using Docker Compose, which spins up the Frontend, Backend, and Database simultaneously.
+
+```bash
+# Start all services
+docker-compose up --build
 ```
 
-### 2. `useBrowseFilters` - Filtering Logic
-**Purpose**: Handles all filtering logic for recipes and mealplans.
+Access the application:
+- **Frontend**: `http://localhost:3000`
+- **Backend API**: `http://localhost:8080`
+- **MongoDB**: `localhost:27017`
 
-**Features**:
-- Filters recipes by search query, cuisine, difficulty, time, tags, nutrition
-- Filters mealplans by search query, difficulty, tags, nutrition (premium)
-- Memoized filtering for performance
-- Premium-only nutrition filtering for mealplans
+### Local Development
 
-**Usage**:
-```typescript
-const { filteredRecipes, filteredMealPlans } = useBrowseFilters({
-  recipes,
-  mealplans,
-  recipeFilters,
-  mealplanFilters,
-  favorites,
-  userPlannedRecipes,
-  favoriteMealplans,
-  isPremium,
-});
+If you prefer running services individually:
+
+**Backend:**
+```bash
+cd Backend
+npm install
+# Ensure .env is configured
+npm run dev
 ```
 
-### 3. `useBrowseNavigation` - Navigation and URL Management
-**Purpose**: Manages tab navigation and URL state.
-
-**Features**:
-- Manages active tab state
-- Handles tab switching
-- Manages URL parameters
-- Handles navigation to create pages
-
-**Usage**:
-```typescript
-const {
-  tab,
-  handleTabClick,
-  handleCreateRecipe,
-  handleCreateMealPlan,
-} = useBrowseNavigation();
+**Frontend:**
+```bash
+cd Frontend
+npm install
+npm run dev
 ```
 
-### 4. `useBrowseState` - State Management (Enhanced)
-**Purpose**: Manages UI state and persistence.
+## Project Structure
 
-**Features**:
-- Manages filter states
-- Handles localStorage persistence
-- Manages scroll position restoration
-- Manages visible recipe count
-
-**Usage**:
-```typescript
-const {
-  recipeFilters,
-  setRecipeFilters,
-  mealplanFilters,
-  setMealplanFilters,
-  showRecipeFilters,
-  setShowRecipeFilters,
-  showMealplanFilters,
-  setShowMealplanFilters,
-  visibleRecipeCount,
-  setVisibleRecipeCount,
-} = useBrowseState();
+```
+ChefCircle/
+├── Backend/                 # Express API
+│   ├── src/
+│   │   ├── controllers/     # Route logic
+│   │   ├── models/          # Mongoose Schemas
+│   │   ├── routes/          # API Endpoints
+│   │   ├── services/        # Business logic & External APIs
+│   │   └── middleware/      # Auth & Uploads
+├── Frontend/                # React Application
+│   ├── src/
+│   │   ├── components/      # Reusable UI components
+│   │   ├── pages/           # Page views
+│   │   ├── hooks/           # Custom React hooks
+│   │   └── lib/             # Utilities & Config
+├── docker-compose.yml       # Container orchestration
+└── README.md                # Project documentation
 ```
 
-## Utility Functions
-
-### `browseStorage.ts`
-**Purpose**: Centralized storage utilities for browse page state.
-
-**Functions**:
-- `saveToStorage(key, value)` - Save to localStorage
-- `loadFromStorage(key, defaultValue)` - Load from localStorage
-- `saveScrollPosition(count)` - Save scroll position and recipe count
-- `restoreScrollPosition()` - Restore scroll position and return recipe count
-
-## Refactored Browse.tsx Structure
-
-The main Browse.tsx component can now be simplified to:
-
-```typescript
-export default function Browse() {
-  const { tab, handleTabClick, handleCreateRecipe } = useBrowseNavigation();
-  const { visibleRecipeCount, setVisibleRecipeCount, ...filterState } = useBrowseState();
-  const { recipes, mealplans, loading, error, ...dataActions } = useBrowseData({ 
-    tab, 
-    visibleRecipeCount 
-  });
-  const { filteredRecipes, filteredMealPlans } = useBrowseFilters({
-    recipes,
-    mealplans,
-    // ... other props
-  });
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
-      <Navigation />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <BrowseHeader onCreateRecipe={handleCreateRecipe} />
-        <BrowseTabs 
-          tab={tab}
-          onTabChange={handleTabClick}
-          recipes={filteredRecipes}
-          mealplans={filteredMealPlans}
-          loading={loading}
-          error={error}
-          {...dataActions}
-          visibleRecipeCount={visibleRecipeCount}
-          onLoadMore={() => setVisibleRecipeCount(prev => prev + 9)}
-        />
-      </main>
-    </div>
-  );
-}
-```
-
-## Benefits
-
-1. **Separation of Concerns**: Each hook has a single responsibility
-2. **Reusability**: Hooks can be reused in other components
-3. **Testability**: Smaller, focused hooks are easier to test
-4. **Maintainability**: Changes are isolated to specific files
-5. **Performance**: Better memoization and fewer re-renders
-6. **Readability**: Main component is much cleaner and easier to understand
-
-## Migration Steps
-
-1. ✅ Extract `useBrowseData` - Data fetching and interactions
-2. ✅ Extract `useBrowseFilters` - Filtering logic
-3. ✅ Extract `useBrowseNavigation` - Navigation and URL management
-4. ✅ Enhance `useBrowseState` - State management
-5. ✅ Create `browseStorage.ts` - Storage utilities
-6. 🔄 Update Browse.tsx to use new hooks
-7. 🔄 Extract components (BrowseHeader, BrowseTabs, etc.)
-8. 🔄 Add error boundaries and loading states 
